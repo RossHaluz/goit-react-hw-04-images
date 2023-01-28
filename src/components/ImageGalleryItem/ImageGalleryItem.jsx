@@ -1,47 +1,35 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import { GalleryItem, ImageGalleryItemImg } from './ImageGalleryItem.styled';
 import LargePhotoModal from 'components/Modal';
 
-class ImageGalleryItem extends Component {
-  state = {
-    largeImage: '',
-    isOpen: false,
+const ImageGalleryItem = ({ items }) => {
+  const [largeImage, setlargeImage] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onShowLargeImg = img => {
+    setIsOpen(state => !state);
+    setlargeImage(img);
   };
 
-  onShowLargeImg = img => {
-    this.setState(state => ({ isOpen: !state.isOpen }));
-    this.setState({ largeImage: img });
-  };
-
-  render() {
-    const { items } = this.props;
-    const { isOpen, largeImage } = this.state;
-    return (
-      <>
-        {items.map(({ webformatURL, largeImageURL, id }) => {
-          return (
-            <GalleryItem
-              key={id}
-              onClick={() => this.onShowLargeImg(largeImageURL)}
-            >
-              <ImageGalleryItemImg
-                src={webformatURL}
-                alt=""
-                width={350}
-                height={350}
-              />
-            </GalleryItem>
-          );
-        })}
-        {isOpen && (
-          <LargePhotoModal
-            largeImg={largeImage}
-            onClose={this.onShowLargeImg}
-          />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      {items.map(({ webformatURL, largeImageURL, id }) => {
+        return (
+          <GalleryItem key={id} onClick={() => onShowLargeImg(largeImageURL)}>
+            <ImageGalleryItemImg
+              src={webformatURL}
+              alt=""
+              width={350}
+              height={350}
+            />
+          </GalleryItem>
+        );
+      })}
+      {isOpen && (
+        <LargePhotoModal largeImg={largeImage} onClose={onShowLargeImg} />
+      )}
+    </>
+  );
+};
 
 export default ImageGalleryItem;

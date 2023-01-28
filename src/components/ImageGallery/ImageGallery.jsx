@@ -2,7 +2,7 @@ import React from 'react';
 import { ImageGalleryList } from './ImageGallery.styled';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 
-const ImageGallery = ({ items, id }) => {
+const ImageGallery = ({ items }) => {
   return (
     <ImageGalleryList>
       <ImageGalleryItem items={items} />

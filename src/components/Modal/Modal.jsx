@@ -1,40 +1,72 @@
-import React, { Component } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Overlay, Modal } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 
-class LargePhotoModal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.onCloseModal);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.onCloseModal);
-  }
-
-  onCloseModal = e => {
+const LargePhotoModal = ({ largeImg, onClose }) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onCloseModal = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleBackdropClick = e => {
+  useEffect(() => {
+    window.addEventListener('keydown', onCloseModal);
+
+    return () => {
+      window.removeEventListener('keydown', onCloseModal);
+    };
+  }, [onCloseModal]);
+
+  const handleBackdropClick = e => {
     if (e.target === e.currentTarget) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  render() {
-    return createPortal(
-      <Overlay onClick={this.handleBackdropClick}>
-        <Modal>
-          <img src={this.props.largeImg} alt="" />
-        </Modal>
-      </Overlay>,
-      modalRoot
-    );
-  }
-}
+  return createPortal(
+    <Overlay onClick={handleBackdropClick}>
+      <Modal>
+        <img src={largeImg} alt="" />
+      </Modal>
+    </Overlay>,
+    modalRoot
+  );
+};
+
+// class LargePhotoModal extends Component {
+//   componentDidMount() {
+//     window.addEventListener('keydown', this.onCloseModal);
+//   }
+
+//   componentWillUnmount() {
+//     window.removeEventListener('keydown', this.onCloseModal);
+//   }
+
+//   onCloseModal = e => {
+//     if (e.code === 'Escape') {
+//       this.props.onClose();
+//     }
+//   };
+
+//   handleBackdropClick = e => {
+//     if (e.target === e.currentTarget) {
+//       this.props.onClose();
+//     }
+//   };
+
+//   render() {
+//     return createPortal(
+//       <Overlay onClick={this.handleBackdropClick}>
+//         <Modal>
+//           <img src={this.props.largeImg} alt="" />
+//         </Modal>
+//       </Overlay>,
+//       modalRoot
+//     );
+//   }
+// }
 
 export default LargePhotoModal;
